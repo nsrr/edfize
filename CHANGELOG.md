@@ -6,3 +6,7 @@
   - `run`: Prints out the headers of all edfs in the current directory
   - `help`: Displays information about `edfize` along with all available commands
   - `version`: Displays the current `edfize` version
+- `edfize test` checks for the following:
+  - Expected Length Check: The expected total size is computed from the (`number
+    of data records` * `total samples across all signals`) + `size of header` and
+    this is compared to the actual file size.

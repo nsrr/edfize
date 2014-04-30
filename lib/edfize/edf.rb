@@ -2,7 +2,7 @@ require 'edfize/signal'
 
 module Edfize
   class Edf
-    attr_reader :signals
+    attr_reader :signals, :filename
 
     HEADER_OFFSET = 256
 
@@ -25,6 +25,31 @@ module Edfize
       File.size(@filename)
     end
 
+    def size_of_header
+      HEADER_OFFSET + ns * (16 + 80 + 8 + 8 + 8 + 8 + 8 + 80 + 8 + 32)
+    end
+
+    def expected_size_of_header
+      256 + (ns * 256)
+    end
+
+    def total_size
+      IO.binread(@filename).size
+    end
+
+    def expected_data_size
+      result = 0
+      @signals.each do |signal|
+        result += signal.samples_in_data_record.to_i * 2 # NR * Int(16)
+      end
+      result * number_of_data_records.to_i
+    end
+
+    def expected_total_size
+      expected_data_size + size_of_header
+      # (duration_of_a_data_record.to_i * number_of_data_records.to_i * number_of_signals.to_i) * 8
+    end
+
     def print_header
       puts @filename
       puts "#{size} bytes (Total File Size)"
@@ -34,7 +59,7 @@ module Edfize
       puts "'#{header_start_date_of_recording}' (dd.mm.yy start date of recording)"
       puts "'#{header_start_time_of_recording}' (hh.mm.ss start time of recording)"
       # puts "--- RESERVED"
-      puts "'#{number_of_data_records}' seconds (number of data records, -1 if unknown)"
+      puts "'#{number_of_data_records}' (number of data records, -1 if unknown)"
       puts "'#{duration_of_a_data_record}' seconds (duration of a data record)"
       puts "'#{number_of_signals}' number of signals (ns) in data record"
       signals.each_with_index do |signal, index|
@@ -49,6 +74,14 @@ module Edfize
         puts "'#{signal.samples_in_data_record}' (signal[#{index+1}] samples_in_data_record)"
         puts "'#{signal.reserved_area}' (signal[#{index+1}] reserved_area)"
       end
+      puts "#{size} bytes (Total File Size)"
+      puts "Size of Header (bytes)          : #{size_of_header}"
+      puts "Size of Data   (bytes)          : #{data_size}"
+      puts "Total Size     (bytes)          : #{total_size}"
+
+      puts "Expected Size of Header (bytes) : #{expected_size_of_header}"
+      puts "Expected Size of Data   (bytes) : #{expected_data_size}"
+      puts "Expected Total Size     (bytes) : #{expected_total_size}"
     end
 
     def header_version
@@ -192,6 +225,30 @@ module Edfize
         @signals[signal_number] ||= Signal.new()
         @signals[signal_number].reserved_area = IO.binread(@filename, 32, offset+(signal_number*32))
       end
+    end
+
+    def get_samples
+      offset = size_of_header
+      current_read_offset = 0
+      (0..ns-1).to_a.each do |signal_number|
+        @signals[signal_number] ||= Signal.new()
+        read_size = @signals[signal_number].samples_in_data_record.to_i * 2 * number_of_data_records.to_i
+        @signals[signal_number].samples = IO.binread(@filename, read_size, size_of_header + current_read_offset).unpack('s*')
+        current_read_offset += read_size
+      end
+    end
+
+    # 2-byte integer
+    # [16Bit]signed short: -32767 to 32767
+    # .unpack('s*')
+    def data_signals
+      data_section = IO.binread(@filename, nil, size_of_header)
+      dataset_section.unpack('s*')
+    end
+
+    def data_size
+      data_section = IO.binread(@filename, nil, size_of_header)
+      data_section.size
     end
   end
 end

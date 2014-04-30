@@ -1,5 +1,8 @@
 require 'edfize/edf'
+require 'edfize/tests'
 require 'edfize/version'
+
+require 'colorize'
 
 module Edfize
   def self.launch(argv)
@@ -29,8 +32,19 @@ module Edfize
   end
 
   def self.check
+    test_start_time = Time.now
     edf_count = edfs_in_current_directory.count
-    puts "Checking #{edf_count} EDF#{'s' unless edf_count == 1}"
+    test_count = 0
+    failure_count = 0
+    puts "Started\n"
+    edfs_in_current_directory.each do |edf_file_name|
+      edf = Edfize::Edf.new(edf_file_name)
+      tests_run, failures = Edfize::Tests.run(edf)
+      test_count += tests_run
+      failure_count += failures
+    end
+    puts "\nFinished in #{Time.now - test_start_time}s"
+    puts "#{edf_count} EDF#{'s' unless edf_count == 1}, #{test_count} test#{'s' unless test_count == 1}, " + "#{failure_count} failure#{'s' unless failure_count == 1}".colorize( failure_count == 0 ? :green : :red )
   end
 
   def self.help

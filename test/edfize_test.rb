@@ -18,4 +18,8 @@ class EdfizeTest < Test::Unit::TestCase
     assert_nil Edfize.launch(['h'])
   end
 
+  def test_test_command
+    assert_nil Edfize.launch(['t'])
+  end
+
 end
