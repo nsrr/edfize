@@ -34,7 +34,7 @@ Use `edfize check` to check that EDFs stored in the current directory have a val
 Use `edfize run` to print out signal header information for each EDF in the current directory.
 
     cd <edf-directory>
-    edfize check
+    edfize run
 
 ### View A List of All Available Commands for Edfize
 
