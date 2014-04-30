@@ -10,3 +10,7 @@
   - Expected Length Check: The expected total size is computed from the (`number
     of data records` * `total samples across all signals`) + `size of header` and
     this is compared to the actual file size.
+  - Reserved Area Checks: The header and the individual header reserved areas are
+    checked to validate that they are blank. Non-blank areas are a sign that the
+    edf header is corrupt and that data from the signal data block have leaked into
+    the header itself.

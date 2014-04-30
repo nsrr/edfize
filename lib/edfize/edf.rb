@@ -58,7 +58,7 @@ module Edfize
       puts "'#{header_local_recording_identification}' (local recording indentification)"
       puts "'#{header_start_date_of_recording}' (dd.mm.yy start date of recording)"
       puts "'#{header_start_time_of_recording}' (hh.mm.ss start time of recording)"
-      # puts "--- RESERVED"
+      puts "'#{reserved}' (reserved)"
       puts "'#{number_of_data_records}' (number of data records, -1 if unknown)"
       puts "'#{duration_of_a_data_record}' seconds (duration of a data record)"
       puts "'#{number_of_signals}' number of signals (ns) in data record"
@@ -114,9 +114,9 @@ module Edfize
     end
 
     # 44 ascii : reserved
-    # def reserved
-    #   IO.binread(@filename, 44, 192)
-    # end
+    def reserved
+      IO.binread(@filename, 44, 192)
+    end
 
     # 8 ascii : number of data records (-1 if unknown, obey item 10 of the additional EDF+ specs)
     def number_of_data_records

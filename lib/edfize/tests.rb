@@ -1,4 +1,6 @@
 require 'edfize/tests/check_length'
+require 'edfize/tests/check_reserved_area'
+require 'edfize/tests/check_reserved_signal_areas'
 
 module Edfize
   module Tests
@@ -13,6 +15,12 @@ module Edfize
       test_count = 0
 
       test_expected_length(edf) ? nil : failure_count += 1
+      test_count += 1
+
+      test_reserved_area_blank(edf) ? nil : failure_count += 1
+      test_count += 1
+
+      test_reserved_signal_areas_blank(edf) ? nil : failure_count += 1
       test_count += 1
 
       [test_count, failure_count]

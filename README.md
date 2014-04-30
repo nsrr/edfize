@@ -32,6 +32,7 @@ Use `edfize check` to check that EDFs stored in the current directory have a val
 A list of validations performed is:
 
 - **Expected Length Check**: Compares the calculated size of the file based on signal sizes defined in the header with the actual file size. A failure may indicate corruption in the header (if the expected is less than the actual file size), or a partial/truncated file (if the expected is more than the actual file size).
+- **Reserved Area Checks**: Check that reserved areas are blank. Non-blank reserved areas can indicate a sign of header or EDF file corruption.
 
 ### Print Signal Header information
 
