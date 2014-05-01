@@ -2,13 +2,28 @@ require 'edfize/signal'
 
 module Edfize
   class Edf
-    attr_reader :signals, :filename
+    attr_reader   :filename
+
+    attr_reader   :reserved               # 44 bytes - ASCII
+    attr_reader   :number_of_data_records #  8 bytes - ASCII
+
+    attr_accessor :signals
+
+    RESERVED_SIZE = 44
+
+
 
     HEADER_OFFSET = 256
+    SIZE_OF_SAMPLE_IN_BYTES = 2
 
     def initialize(filename)
       @filename = filename
       @signals = []
+
+      read_header
+
+      # Other
+      get_number_of_data_records
       signal_labels
       transducer_types
       physical_dimensions
@@ -17,12 +32,12 @@ module Edfize
       digital_minimums
       digital_maximums
       prefilterings
-      samples_in_data_records
+      samples_per_data_records
       reserved_areas
     end
 
-    def size
-      File.size(@filename)
+    def load_signals
+      get_data_records
     end
 
     def size_of_header
@@ -33,55 +48,61 @@ module Edfize
       256 + (ns * 256)
     end
 
-    def total_size
-      IO.binread(@filename).size
+    # Total File Size In Bytes
+    def edf_size
+      File.size(@filename)
     end
 
+    # Data Section Size In Bytes
     def expected_data_size
-      result = 0
-      @signals.each do |signal|
-        result += signal.samples_in_data_record.to_i * 2 # NR * Int(16)
-      end
-      result * number_of_data_records.to_i
+      @signals.collect(&:samples_per_data_record).inject(:+).to_i * @number_of_data_records * SIZE_OF_SAMPLE_IN_BYTES
     end
 
-    def expected_total_size
+    def expected_edf_size
       expected_data_size + size_of_header
-      # (duration_of_a_data_record.to_i * number_of_data_records.to_i * number_of_signals.to_i) * 8
     end
 
     def print_header
-      puts @filename
-      puts "#{size} bytes (Total File Size)"
-      puts "'#{header_version}' (0)"
-      puts "'#{header_local_patient_identification}' (local patient identification)"
-      puts "'#{header_local_recording_identification}' (local recording indentification)"
-      puts "'#{header_start_date_of_recording}' (dd.mm.yy start date of recording)"
-      puts "'#{header_start_time_of_recording}' (hh.mm.ss start time of recording)"
-      puts "'#{reserved}' (reserved)"
-      puts "'#{number_of_data_records}' (number of data records, -1 if unknown)"
-      puts "'#{duration_of_a_data_record}' seconds (duration of a data record)"
-      puts "'#{number_of_signals}' number of signals (ns) in data record"
+      puts "\nEDF                            : #{@filename}"
+      puts "Total File Size                : #{edf_size} bytes"
+      puts "\nHeader Information"
+      puts "Version                        : #{header_version}"
+      puts "Local Patient Identification   : #{header_local_patient_identification}"
+      puts "Local Recording Identification : #{header_local_recording_identification}"
+      puts "Start Date of Recording        : #{header_start_date_of_recording} (dd.mm.yy)"
+      puts "Start Time of Recording        : #{header_start_time_of_recording} (hh.mm.ss)"
+      puts "Reserved                       : '#{@reserved}'"
+      puts "Number of Data Records         : #{number_of_data_records}"
+      puts "Duration of a Data Record      : #{duration_of_a_data_record.to_i} second#{'s' unless duration_of_a_data_record.to_i == 1}"
+      puts "Number of Signals (NS)         : #{number_of_signals}"
+      puts "\nSignal Information"
       signals.each_with_index do |signal, index|
-        puts "'#{signal.label}' (signal[#{index+1}] label)"
-        puts "'#{signal.physical_dimension}' (signal[#{index+1}] physical_dimension)"
-        puts "'#{signal.transducer_type}' (signal[#{index+1}] transducer_type)"
-        puts "'#{signal.physical_minimum}' (signal[#{index+1}] physical_minimum)"
-        puts "'#{signal.physical_maximum}' (signal[#{index+1}] physical_maximum)"
-        puts "'#{signal.digital_minimum}' (signal[#{index+1}] digital_minimum)"
-        puts "'#{signal.digital_maximum}' (signal[#{index+1}] digital_maximum)"
-        puts "'#{signal.prefiltering}' (signal[#{index+1}] prefiltering)"
-        puts "'#{signal.samples_in_data_record}' (signal[#{index+1}] samples_in_data_record)"
-        puts "'#{signal.reserved_area}' (signal[#{index+1}] reserved_area)"
+        puts "\n  Position                     : #{index + 1}"
+        puts "  Label                        : #{signal.label}"
+        puts "  Physical Dimension           : #{signal.physical_dimension}"
+        puts "  Transducer Type              : #{signal.transducer_type}"
+        puts "  Physical Minimum             : #{signal.physical_minimum}"
+        puts "  Physical Maximum             : #{signal.physical_maximum}"
+        puts "  Digital Minimum              : #{signal.digital_minimum}"
+        puts "  Digital Maximum              : #{signal.digital_maximum}"
+        puts "  Prefiltering                 : #{signal.prefiltering}"
+        puts "  Samples Per Data Record      : #{signal.samples_per_data_record}"
+        puts "  Reserved Area                : '#{signal.reserved_area}'"
       end
-      puts "#{size} bytes (Total File Size)"
-      puts "Size of Header (bytes)          : #{size_of_header}"
-      puts "Size of Data   (bytes)          : #{data_size}"
-      puts "Total Size     (bytes)          : #{total_size}"
+      puts "\nGeneral Information"
+      puts "Size of Header (bytes)         : #{size_of_header}"
+      puts "Size of Data   (bytes)         : #{data_size}"
+      puts "Total Size     (bytes)         : #{edf_size}"
 
-      puts "Expected Size of Header (bytes) : #{expected_size_of_header}"
-      puts "Expected Size of Data   (bytes) : #{expected_data_size}"
-      puts "Expected Total Size     (bytes) : #{expected_total_size}"
+      puts "Expected Size of Header (bytes): #{expected_size_of_header}"
+      puts "Expected Size of Data   (bytes): #{expected_data_size}"
+      puts "Expected Total Size     (bytes): #{expected_edf_size}"
+    end
+
+    protected
+
+    def read_header
+      read_reserved
     end
 
     def header_version
@@ -114,13 +135,13 @@ module Edfize
     end
 
     # 44 ascii : reserved
-    def reserved
-      IO.binread(@filename, 44, 192)
+    def read_reserved
+      @reserved = IO.binread(@filename, RESERVED_SIZE, 192)
     end
 
     # 8 ascii : number of data records (-1 if unknown, obey item 10 of the additional EDF+ specs)
-    def number_of_data_records
-      IO.binread(@filename, 8, 236)
+    def get_number_of_data_records
+      @number_of_data_records = IO.binread(@filename, 8, RESERVED_SIZE + 192).to_i
     end
 
     # 8 ascii : duration of a data record, in seconds
@@ -210,11 +231,12 @@ module Edfize
     end
 
     # ns * 8 ascii : ns * nr of samples in each data record
-    def samples_in_data_records
+    def samples_per_data_records
       offset = HEADER_OFFSET + ns * (16 + 80 + 8 + 8 + 8 + 8 + 8 + 80)
       (0..ns-1).to_a.each do |signal_number|
         @signals[signal_number] ||= Signal.new()
-        @signals[signal_number].samples_in_data_record = IO.binread(@filename, 8, offset+(signal_number*8))
+        @signals[signal_number].samples_per_data_record = IO.binread(@filename, 8, offset+(signal_number*8)).to_i
+        @signals[signal_number].samples = Array.new(@signals[signal_number].samples_per_data_record, 0)
       end
     end
 
@@ -227,28 +249,22 @@ module Edfize
       end
     end
 
-    def get_samples
-      offset = size_of_header
-      current_read_offset = 0
-      (0..ns-1).to_a.each do |signal_number|
-        @signals[signal_number] ||= Signal.new()
-        read_size = @signals[signal_number].samples_in_data_record.to_i * 2 * number_of_data_records.to_i
-        @signals[signal_number].samples = IO.binread(@filename, read_size, size_of_header + current_read_offset).unpack('s*')
-        current_read_offset += read_size
+
+    #
+    def get_data_records
+      current_read_offset = size_of_header
+      (0..@number_of_data_records-1).to_a.each do |data_record_index|
+        @signals.each do |signal|
+          # 16-bit signed integer size = 2 Bytes = 2 ASCII characters
+          read_size = signal.samples_per_data_record * SIZE_OF_SAMPLE_IN_BYTES
+          signal.samples[data_record_index..data_record_index+signal.samples_per_data_record] = IO.binread(@filename, read_size, current_read_offset).unpack('s*')
+          current_read_offset += read_size
+        end
       end
     end
 
-    # 2-byte integer
-    # [16Bit]signed short: -32767 to 32767
-    # .unpack('s*')
-    def data_signals
-      data_section = IO.binread(@filename, nil, size_of_header)
-      dataset_section.unpack('s*')
-    end
-
     def data_size
-      data_section = IO.binread(@filename, nil, size_of_header)
-      data_section.size
+      IO.binread(@filename, nil, size_of_header).size
     end
   end
 end
