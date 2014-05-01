@@ -1,29 +1,13 @@
+require 'edfize/tests/result'
+require 'edfize/tests/runner'
 require 'edfize/tests/check_length'
 require 'edfize/tests/check_reserved_area'
 require 'edfize/tests/check_reserved_signal_areas'
 
 module Edfize
   module Tests
-    def self.verbose
-      true
-    end
-
-    def self.run(edf)
-      puts "\n#{edf.filename}"
-
-      failure_count = 0
-      test_count = 0
-
-      test_expected_length(edf) ? nil : failure_count += 1
-      test_count += 1
-
-      test_reserved_area_blank(edf) ? nil : failure_count += 1
-      test_count += 1
-
-      test_reserved_signal_areas_blank(edf) ? nil : failure_count += 1
-      test_count += 1
-
-      [test_count, failure_count]
-    end
+    extend CheckLength
+    extend CheckReservedArea
+    extend CheckReservedSignalAreas
   end
 end
