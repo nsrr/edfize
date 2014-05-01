@@ -54,6 +54,7 @@ Usage: edfize COMMAND [ARGS]
 The most common edfize commands are:
   [c]heck           Check EDFs in current directory for errors
   [t]est            Same as [c]heck
+  [r]un             Print EDF headers for current directory
   [h]elp            Show edfize command-line documentation
   [v]ersion         Returns the version of Edfize
 
