@@ -180,7 +180,7 @@ module Edfize
 
     def get_data_records
       current_read_offset = size_of_header
-      (0..ns-1).to_a.each do |data_record_index|
+      (0..@number_of_data_records-1).to_a.each do |data_record_index|
         @signals.each do |signal|
           # 16-bit signed integer size = 2 Bytes = 2 ASCII characters
           read_size = signal.samples_per_data_record * SIZE_OF_SAMPLE_IN_BYTES
