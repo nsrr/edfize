@@ -107,9 +107,7 @@ module Edfize
       puts "\nSignal Information"
       signals.each_with_index do |signal, index|
         puts "\n  Position                     : #{index + 1}"
-        Signal::SIGNAL_CONFIG.each do |section, hash|
-          puts "  #{hash[:name]}#{' '*(29 - hash[:name].size)}: " + signal.send(section).to_s
-        end
+        signal.print_header
       end
       puts "\nGeneral Information"
       puts "Size of Header (bytes)         : #{size_of_header}"

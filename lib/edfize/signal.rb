@@ -23,5 +23,11 @@ module Edfize
       @samples = []
     end
 
+    def print_header
+      SIGNAL_CONFIG.each do |section, hash|
+        puts "  #{hash[:name]}#{' '*(29 - hash[:name].size)}: " + self.send(section).to_s
+      end
+    end
+
   end
 end
