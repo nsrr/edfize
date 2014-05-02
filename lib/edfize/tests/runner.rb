@@ -27,17 +27,6 @@ module Edfize
         results.each do |result|
           print_result(result)
         end
-
-        # test_expected_length(edf) ? nil : failure_count += 1
-        # test_count += 1
-
-        # test_reserved_area_blank(edf) ? nil : failure_count += 1
-        # test_count += 1
-
-        # test_reserved_signal_areas_blank(edf) ? nil : failure_count += 1
-        # test_count += 1
-
-        # [test_count, failure_count]
       end
 
       def print_result(result)

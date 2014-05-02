@@ -8,17 +8,9 @@ Ruby gem used to load, validate, and parse European Data Format files. Used for 
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Use `gem install edfize` to update Edfize to the latest stable
 
-    gem 'edfize'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install edfize
+Use `gem install edfize --pre` to update Edfize to the latest prerelease
 
 ## Usage
 
@@ -57,12 +49,6 @@ Use `edfize help` to list available commands and descriptions for Edfize.
 Use `edfize version` to check the version of Edfize.
 
     edfize version
-
-### Upgrade Edfize
-
-Use `gem install edfize` to update Edfize to the latest stable
-
-Use `gem install edfize --pre` to update Edfize to the latest prerelease
 
 ### Example of how to Load and Analyze EDFs in a Ruby Script
 

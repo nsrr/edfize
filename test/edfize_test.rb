@@ -1,6 +1,19 @@
 require 'test_helper'
+require 'fileutils'
 
 class EdfizeTest < Test::Unit::TestCase
+
+  def setup
+    FileUtils.cd('test/support')
+    @original_stdout = $stdout
+    $stdout = StringIO.new
+  end
+
+  def teardown
+    $stdout = @original_stdout
+    @original_stdout = nil
+    FileUtils.cd('../..')
+  end
 
   def test_edfize_application
     assert_kind_of Module, Edfize
@@ -20,6 +33,10 @@ class EdfizeTest < Test::Unit::TestCase
 
   def test_test_command
     assert_nil Edfize.launch(['t'])
+  end
+
+  def test_run_command
+    assert_equal ['zero-data-records.edf'], Edfize.launch(['r'])
   end
 
 end
