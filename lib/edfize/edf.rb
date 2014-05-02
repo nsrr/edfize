@@ -156,7 +156,7 @@ module Edfize
 
     def read_header_section(section)
       result = IO.binread(@filename, HEADER_CONFIG[section][:size], compute_offset(section) )
-      result = result.send(HEADER_CONFIG[section][:after_read]) unless HEADER_CONFIG[section][:after_read].to_s == ''
+      result = result.to_s.send(HEADER_CONFIG[section][:after_read]) unless HEADER_CONFIG[section][:after_read].to_s == ''
       self.instance_variable_set("@#{section}", result)
     end
 
