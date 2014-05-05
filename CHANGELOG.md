@@ -1,15 +1,14 @@
 ## 0.1.0
 - Initial EDF class to load headers and signals into Ruby objects
 - `edfize` command has the following actions:
-  - `test`: Validates EDFs in the current directory for errors
+  - `test`: Validates EDFs in the current directory and subdirectories for errors
     - To only show failing tests, add the flag `--failing`
       - `edfize test --failing`
     - To suppress descriptive test failures, add the flag `--quiet`
       - `edfize test --quiet`
     - Both flags can be used together
       - `edfize test --failing --quiet`
-  - `check`: Same as `test`
-  - `run`: Prints out the headers of all edfs in the current directory
+  - `run`: Prints out the headers of all edfs in the current directory and subdirectories
   - `help`: Displays information about `edfize` along with all available commands
   - `version`: Displays the current `edfize` version
 - `edfize test` checks for the following:

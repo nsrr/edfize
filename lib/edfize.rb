@@ -20,7 +20,7 @@ module Edfize
 
   def self.print_headers
     puts "----------------"
-    edfs_in_current_directory.each do |edf_file_name|
+    edfs_in_current_directory_and_subdirectories.each do |edf_file_name|
       edf = Edfize::Edf.new(edf_file_name)
       edf.print_header
       puts "----------------"
@@ -33,11 +33,11 @@ module Edfize
 
   def self.check(argv)
     test_start_time = Time.now
-    edf_count = edfs_in_current_directory.count
+    edf_count = edfs_in_current_directory_and_subdirectories.count
     test_count = 0
     failure_count = 0
     puts "Started\n"
-    edfs_in_current_directory.each do |edf_file_name|
+    edfs_in_current_directory_and_subdirectories.each do |edf_file_name|
       edf = Edfize::Edf.new(edf_file_name)
       runner = Edfize::Tests::Runner.new(edf, argv)
       runner.run_tests
@@ -53,10 +53,11 @@ module Edfize
 Usage: edfize COMMAND [ARGS]
 
 The most common edfize commands are:
-  [c]heck           Check EDFs in current directory for errors
-  [t]est            Same as [c]heck
-  [r]un             Print EDF headers for current directory
-  [h]elp            Show edfize command-line documentation
+  [t]est            Check EDFs in directory and subdirectories
+    --failing       Only display failing tests
+    --quiet         Suppress failing test descriptions
+  [r]un             Print EDF header information
+  [h]elp            Show edfize command documentation
   [v]ersion         Returns the version of Edfize
 
 Commands can be referenced by the first letter:
@@ -66,7 +67,7 @@ EOT
     puts help_message
   end
 
-  def self.edfs_in_current_directory
-    Dir.glob('*.edf')
+  def self.edfs_in_current_directory_and_subdirectories
+    Dir.glob('**/*.edf')
   end
 end
