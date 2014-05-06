@@ -179,15 +179,23 @@ module Edfize
     end
 
     def get_data_records
+      @signals.each{|signal| signal.initialize_array_sizes!(@number_of_data_records)}
+
       current_read_offset = size_of_header
       (0..@number_of_data_records-1).to_a.each do |data_record_index|
         @signals.each do |signal|
           # 16-bit signed integer size = 2 Bytes = 2 ASCII characters
+          # 16-bit signed integer in "Little Endian" format (least significant byte first)
+          # unpack:  s<         16-bit signed, (little-endian) byte order
           read_size = signal.samples_per_data_record * SIZE_OF_SAMPLE_IN_BYTES
-          signal.samples[data_record_index..data_record_index+signal.samples_per_data_record] = IO.binread(@filename, read_size, current_read_offset).unpack('s*')
+          start_index = data_record_index * signal.samples_per_data_record
+          end_index   = (data_record_index + 1) * signal.samples_per_data_record
+          signal.digital_values[start_index..end_index] = IO.binread(@filename, read_size, current_read_offset).unpack('s<*')
           current_read_offset += read_size
         end
       end
+
+      @signals.each{|signal| signal.calculate_physical_values!}
     end
 
     def data_size

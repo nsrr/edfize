@@ -4,7 +4,7 @@ module Edfize
                   :physical_minimum, :physical_maximum,
                   :digital_minimum, :digital_maximum,
                   :prefiltering, :samples_per_data_record,
-                  :reserved_area, :samples
+                  :reserved_area, :digital_values, :physical_values
 
     SIGNAL_CONFIG = {
       label:                   { size: 16, after_read: :strip, name: 'Label' },
@@ -20,13 +20,27 @@ module Edfize
     }
 
     def initialize
-      @samples = []
+      @digital_values = []
+      @physical_values = []
     end
 
     def print_header
       SIGNAL_CONFIG.each do |section, hash|
         puts "  #{hash[:name]}#{' '*(29 - hash[:name].size)}: " + self.send(section).to_s
       end
+    end
+
+    # Physical value (dimension PhysiDim) = (ASCIIvalue-DigiMin)*(PhysiMax-PhysiMin)/(DigiMax-DigiMin) + PhysiMin.
+    def calculate_physical_values!
+      @physical_values = @digital_values.collect{|sample| ( sample - @digital_minimum ) * ( @physical_maximum - @physical_minimum ) / ( @digital_maximum - @digital_minimum) + @physical_minimum }
+    end
+
+    def samples
+      @physical_values
+    end
+
+    def initialize_array_sizes!(data_records)
+      @physical_values = Array.new(@samples_per_data_record * data_records)
     end
 
   end
