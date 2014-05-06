@@ -3,7 +3,7 @@ module Edfize
     MAJOR = 0
     MINOR = 1
     TINY = 0
-    BUILD = "beta5"
+    BUILD = "beta6"
 
     STRING = [MAJOR, MINOR, TINY, BUILD].compact.join('.')
   end
