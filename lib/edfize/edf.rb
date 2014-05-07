@@ -6,16 +6,16 @@ module Edfize
     attr_reader   :filename
 
     # Header Information
-    attr_reader  :version
-    attr_reader  :local_patient_identification
-    attr_reader  :local_recording_identification
-    attr_reader  :start_date_of_recording
-    attr_reader  :start_time_of_recording
-    attr_reader  :number_of_bytes_in_header
-    attr_reader  :reserved
-    attr_reader  :number_of_data_records
-    attr_reader  :duration_of_a_data_record
-    attr_reader  :number_of_signals
+    attr_accessor :version
+    attr_accessor :local_patient_identification
+    attr_accessor :local_recording_identification
+    attr_accessor :start_date_of_recording
+    attr_accessor :start_time_of_recording
+    attr_accessor :number_of_bytes_in_header
+    attr_accessor :reserved
+    attr_accessor :number_of_data_records
+    attr_accessor :duration_of_a_data_record
+    attr_accessor :number_of_signals
 
     attr_accessor :signals
 
@@ -39,12 +39,19 @@ module Edfize
     # Used by tests
     RESERVED_SIZE = HEADER_CONFIG[:reserved][:size]
 
+    def self.create(filename, &block)
+      edf = self.new(filename)
+      yield edf if block_given?
+      edf
+    end
+
     def initialize(filename)
       @filename = filename
       @signals = []
 
       read_header
       read_signal_header
+      self
     end
 
     def load_signals

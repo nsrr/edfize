@@ -36,7 +36,7 @@ class EdfizeTest < Test::Unit::TestCase
   end
 
   def test_run_command
-    assert_equal ['zero-data-records.edf'], Edfize.launch(['r'])
+    assert_equal ['simulated-01.edf', 'zero-data-records.edf'], Edfize.launch(['r'])
   end
 
 end

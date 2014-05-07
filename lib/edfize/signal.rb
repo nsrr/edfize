@@ -22,6 +22,13 @@ module Edfize
     def initialize
       @digital_values = []
       @physical_values = []
+      self
+    end
+
+    def self.create(&block)
+      signal = self.new
+      yield signal if block_given?
+      signal
     end
 
     def print_header
