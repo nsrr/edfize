@@ -39,9 +39,5 @@ module Edfize
       @physical_values
     end
 
-    def initialize_array_sizes!(data_records)
-      @physical_values = Array.new(@samples_per_data_record * data_records)
-    end
-
   end
 end

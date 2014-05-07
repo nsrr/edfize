@@ -179,22 +179,37 @@ module Edfize
     end
 
     def get_data_records
-      @signals.each{|signal| signal.initialize_array_sizes!(@number_of_data_records)}
+      load_digital_signals()
+      calculate_physical_values!()
+    end
 
-      current_read_offset = size_of_header
-      (0..@number_of_data_records-1).to_a.each do |data_record_index|
-        @signals.each do |signal|
-          # 16-bit signed integer size = 2 Bytes = 2 ASCII characters
-          # 16-bit signed integer in "Little Endian" format (least significant byte first)
-          # unpack:  s<         16-bit signed, (little-endian) byte order
-          read_size = signal.samples_per_data_record * SIZE_OF_SAMPLE_IN_BYTES
-          start_index = data_record_index * signal.samples_per_data_record
-          end_index   = (data_record_index + 1) * signal.samples_per_data_record
-          signal.digital_values[start_index..end_index] = IO.binread(@filename, read_size, current_read_offset).unpack('s<*')
-          current_read_offset += read_size
-        end
+    # 16-bit signed integer size = 2 Bytes = 2 ASCII characters
+    # 16-bit signed integer in "Little Endian" format (least significant byte first)
+    # unpack:  s<         16-bit signed, (little-endian) byte order
+    def load_digital_signals
+      @all_signal_data = IO.binread(@filename, nil, size_of_header).unpack('s<*')
+
+      all_samples_per_data_record = @signals.collect{|s| s.samples_per_data_record}
+      total_samples_per_data_record = all_samples_per_data_record.inject(:+).to_i
+
+      offset = 0
+      offsets = []
+      all_samples_per_data_record.each do |samples_per_data_record|
+        offsets << offset
+        offset += samples_per_data_record
       end
 
+      (0..@number_of_data_records-1).to_a.each do |data_record_index|
+        @signals.each_with_index do |signal, signal_index|
+          read_start = data_record_index * total_samples_per_data_record + offsets[signal_index]
+          (0..signal.samples_per_data_record - 1).to_a.each do |value_index|
+            signal.digital_values << @all_signal_data[read_start+value_index]
+          end
+        end
+      end
+    end
+
+    def calculate_physical_values!
       @signals.each{|signal| signal.calculate_physical_values!}
     end
 
