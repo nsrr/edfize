@@ -4,6 +4,7 @@ class EdfTest < Minitest::Test
 
   def setup
     @valid_edf_no_data_records = Edfize::Edf.new('test/support/zero-data-records.edf')
+    @valid_edf_with_three_signals = Edfize::Edf.new('test/support/simulated-01.edf')
   end
 
   def test_edf_version
@@ -106,6 +107,48 @@ class EdfTest < Minitest::Test
   def test_edf_signal_reserved_areas
     assert_equal 224, @valid_edf_no_data_records.send('compute_signal_offset', :reserved_area)
     assert_equal [" "*32]*14, @valid_edf_no_data_records.signals.collect(&:reserved_area)
+  end
+
+  def test_loads_single_epic
+    # Load the first epic (0 index), with the epic size being 1 second
+    @valid_edf_with_three_signals.load_epic(0,1)
+    @signal_one   = @valid_edf_with_three_signals.signals[0]
+    @signal_two   = @valid_edf_with_three_signals.signals[1]
+    @signal_three = @valid_edf_with_three_signals.signals[2]
+    assert_equal [0], @signal_one.digital_values
+    assert_equal [50.000762951094835], @signal_one.physical_values
+    assert_equal [0], @signal_two.digital_values
+    assert_equal [125.00190737773708], @signal_two.physical_values
+    assert_equal [0,1], @signal_three.digital_values
+    assert_equal [0.49019607843136725, 1.470588235294116], @signal_three.physical_values
+  end
+
+  def test_loads_last_epic
+    # Load the first epic (0 index), with the epic size being 1 second
+    @valid_edf_with_three_signals.load_epic(9,1)
+    @signal_one   = @valid_edf_with_three_signals.signals[0]
+    @signal_two   = @valid_edf_with_three_signals.signals[1]
+    @signal_three = @valid_edf_with_three_signals.signals[2]
+    assert_equal [9], @signal_one.digital_values
+    assert_equal [50.01449607080186], @signal_one.physical_values
+    assert_equal [9], @signal_two.digital_values
+    assert_equal [125.03624017700466], @signal_two.physical_values
+    assert_equal [18,19], @signal_three.digital_values
+    assert_equal [18.137254901960773, 19.117647058823536], @signal_three.physical_values
+  end
+
+  def test_loads_last_epic_of_two_seconds
+    # Load the first epic (0 index), with the epic size being 1 second
+    @valid_edf_with_three_signals.load_epic(8,2)
+    @signal_one   = @valid_edf_with_three_signals.signals[0]
+    @signal_two   = @valid_edf_with_three_signals.signals[1]
+    @signal_three = @valid_edf_with_three_signals.signals[2]
+    assert_equal [8,9], @signal_one.digital_values
+    assert_equal [50.01297016861219, 50.01449607080186], @signal_one.physical_values
+    assert_equal [8,9], @signal_two.digital_values
+    assert_equal [125.03242542153048, 125.03624017700466], @signal_two.physical_values
+    assert_equal [16,17,18,19], @signal_three.digital_values
+    assert_equal [16.176470588235304, 17.15686274509804, 18.137254901960773, 19.117647058823536], @signal_three.physical_values
   end
 
 end

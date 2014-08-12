@@ -39,7 +39,7 @@ module Edfize
 
     # Physical value (dimension PhysiDim) = (ASCIIvalue-DigiMin)*(PhysiMax-PhysiMin)/(DigiMax-DigiMin) + PhysiMin.
     def calculate_physical_values!
-      @physical_values = @digital_values.collect{|sample| ( sample - @digital_minimum ) * ( @physical_maximum - @physical_minimum ) / ( @digital_maximum - @digital_minimum) + @physical_minimum }
+      @physical_values = @digital_values.collect{|sample| (( sample - @digital_minimum ) * ( @physical_maximum - @physical_minimum ) / ( @digital_maximum - @digital_minimum) + @physical_minimum rescue nil) }
     end
 
     def samples
