@@ -1,7 +1,7 @@
 ## 0.2.0
 
 ### Enhancements
-- EDFs can now be partially loaded by specifying the epic number and epic size in seconds
+- EDFs can now be partially loaded by specifying the epoch number and epoch size in seconds
 
 ### Testing
 - Updated to minitest test framework along with simplecov for coverage

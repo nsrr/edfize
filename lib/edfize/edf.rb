@@ -58,10 +58,10 @@ module Edfize
       get_data_records
     end
 
-    # Epic Number is Zero Indexed, and Epic Size is in Seconds (Not Data Records)
-    def load_epic(epic_number, epic_size)
+    # Epoch Number is Zero Indexed, and Epoch Size is in Seconds (Not Data Records)
+    def load_epoch(epoch_number, epoch_size)
       # reset_signals!
-      load_digital_signals_by_epic(epic_number, epic_size)
+      load_digital_signals_by_epoch(epoch_number, epoch_size)
       calculate_physical_values!
     end
 
@@ -202,14 +202,14 @@ module Edfize
       calculate_physical_values!()
     end
 
-    def load_digital_signals_by_epic(epic_number, epic_size)
+    def load_digital_signals_by_epoch(epoch_number, epoch_size)
       size_of_data_record_in_bytes = @signals.collect(&:samples_per_data_record).inject(:+).to_i * SIZE_OF_SAMPLE_IN_BYTES
-      data_records_to_retrieve = (epic_size / @duration_of_a_data_record rescue 0)
-      length_of_bytes_to_read = data_records_to_retrieve * size_of_data_record_in_bytes
-      epic_offset_size = epic_number * size_of_data_record_in_bytes # TODO: The size in bytes of an epic
+      data_records_to_retrieve = (epoch_size / @duration_of_a_data_record rescue 0)
+      length_of_bytes_to_read = (data_records_to_retrieve+1) * size_of_data_record_in_bytes
+      epoch_offset_size = epoch_number * epoch_size * size_of_data_record_in_bytes # TODO: The size in bytes of an epoch
 
-      all_signal_data = IO.binread(@filename, length_of_bytes_to_read, size_of_header + epic_offset_size).unpack('s<*')
-      load_signal_data(all_signal_data, data_records_to_retrieve)
+      all_signal_data = (IO.binread(@filename, length_of_bytes_to_read, size_of_header + epoch_offset_size).unpack('s<*') rescue [])
+      load_signal_data(all_signal_data, data_records_to_retrieve+1)
     end
 
     # 16-bit signed integer size = 2 Bytes = 2 ASCII characters

@@ -109,46 +109,46 @@ class EdfTest < Minitest::Test
     assert_equal [" "*32]*14, @valid_edf_no_data_records.signals.collect(&:reserved_area)
   end
 
-  def test_loads_single_epic
-    # Load the first epic (0 index), with the epic size being 1 second
-    @valid_edf_with_three_signals.load_epic(0,1)
+  def test_loads_single_epoch
+    # Load the first epoch (0 index), with the epoch size being 1 second
+    @valid_edf_with_three_signals.load_epoch(0,1)
     @signal_one   = @valid_edf_with_three_signals.signals[0]
     @signal_two   = @valid_edf_with_three_signals.signals[1]
     @signal_three = @valid_edf_with_three_signals.signals[2]
-    assert_equal [0], @signal_one.digital_values
-    assert_equal [50.000762951094835], @signal_one.physical_values
-    assert_equal [0], @signal_two.digital_values
-    assert_equal [125.00190737773708], @signal_two.physical_values
-    assert_equal [0,1], @signal_three.digital_values
-    assert_equal [0.49019607843136725, 1.470588235294116], @signal_three.physical_values
+    assert_equal [0,1], @signal_one.digital_values
+    assert_equal [50.000762951094835, 50.002288853284504], @signal_one.physical_values
+    assert_equal [0,1], @signal_two.digital_values
+    assert_equal [125.00190737773708, 125.00572213321126], @signal_two.physical_values
+    assert_equal [0,1,2,3], @signal_three.digital_values
+    assert_equal [0.49019607843136725, 1.470588235294116, 2.4509803921568647, 3.4313725490196134], @signal_three.physical_values
   end
 
-  def test_loads_last_epic
-    # Load the first epic (0 index), with the epic size being 1 second
-    @valid_edf_with_three_signals.load_epic(9,1)
+  def test_loads_last_epoch
+    # Load the last epoch (0 index), with the epoch size being 1 second
+    @valid_edf_with_three_signals.load_epoch(9,1)
     @signal_one   = @valid_edf_with_three_signals.signals[0]
     @signal_two   = @valid_edf_with_three_signals.signals[1]
     @signal_three = @valid_edf_with_three_signals.signals[2]
-    assert_equal [9], @signal_one.digital_values
-    assert_equal [50.01449607080186], @signal_one.physical_values
-    assert_equal [9], @signal_two.digital_values
-    assert_equal [125.03624017700466], @signal_two.physical_values
-    assert_equal [18,19], @signal_three.digital_values
-    assert_equal [18.137254901960773, 19.117647058823536], @signal_three.physical_values
+    assert_equal [9,nil], @signal_one.digital_values
+    assert_equal [50.01449607080186,nil], @signal_one.physical_values
+    assert_equal [9,nil], @signal_two.digital_values
+    assert_equal [125.03624017700466,nil], @signal_two.physical_values
+    assert_equal [18,19,nil,nil], @signal_three.digital_values
+    assert_equal [18.137254901960773, 19.117647058823536,nil,nil], @signal_three.physical_values
   end
 
-  def test_loads_last_epic_of_two_seconds
-    # Load the first epic (0 index), with the epic size being 1 second
-    @valid_edf_with_three_signals.load_epic(8,2)
+  def test_loads_last_epoch_of_two_seconds
+    # Load the fourth epoch (0 index), with the epoch size being 2 seconds
+    @valid_edf_with_three_signals.load_epoch(3,2)
     @signal_one   = @valid_edf_with_three_signals.signals[0]
     @signal_two   = @valid_edf_with_three_signals.signals[1]
     @signal_three = @valid_edf_with_three_signals.signals[2]
-    assert_equal [8,9], @signal_one.digital_values
-    assert_equal [50.01297016861219, 50.01449607080186], @signal_one.physical_values
-    assert_equal [8,9], @signal_two.digital_values
-    assert_equal [125.03242542153048, 125.03624017700466], @signal_two.physical_values
-    assert_equal [16,17,18,19], @signal_three.digital_values
-    assert_equal [16.176470588235304, 17.15686274509804, 18.137254901960773, 19.117647058823536], @signal_three.physical_values
+    assert_equal [6,7,8], @signal_one.digital_values
+    assert_equal [50.00991836423285, 50.01144426642252, 50.01297016861219], @signal_one.physical_values
+    assert_equal [6,7,8], @signal_two.digital_values
+    assert_equal [125.02479591058213, 125.02861066605631, 125.03242542153048], @signal_two.physical_values
+    assert_equal [12,13,14,15,16,17], @signal_three.digital_values
+    assert_equal [12.25490196078431, 13.235294117647072, 14.215686274509807, 15.196078431372541, 16.176470588235304, 17.15686274509804], @signal_three.physical_values
   end
 
 end
