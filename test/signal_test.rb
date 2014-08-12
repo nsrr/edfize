@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SignalTest < Test::Unit::TestCase
+class SignalTest < Minitest::Test
 
   def setup
     @valid_edf_with_three_signals = Edfize::Edf.new('test/support/simulated-01.edf')

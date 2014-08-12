@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class EdfTest < Test::Unit::TestCase
+class EdfTest < Minitest::Test
 
   def setup
     @valid_edf_no_data_records = Edfize::Edf.new('test/support/zero-data-records.edf')

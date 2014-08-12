@@ -1,5 +1,8 @@
 ## 0.2.0
 
+### Testing
+- Updated to minitest test framework along with simplecov for coverage
+
 ## 0.1.0 (May 28, 2014)
 - Initial EDF class to load headers and signals into Ruby objects
 - `edfize` command has the following actions:

@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'fileutils'
 
-class EdfizeTest < Test::Unit::TestCase
+class EdfizeTest < Minitest::Test
 
   def setup
     FileUtils.cd('test/support')
