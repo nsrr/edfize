@@ -2,6 +2,7 @@
 
 ### Enhancements
 - EDFs can now be partially loaded by specifying the epoch number and epoch size in seconds
+- Use of Ruby 2.2.1 is now recommended
 
 ### Testing
 - Updated to minitest test framework along with simplecov for coverage
