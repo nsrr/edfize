@@ -1,4 +1,4 @@
-## 0.2.0
+## 0.2.0 (March 12, 2015)
 
 ### Enhancements
 - EDFs can now be partially loaded by specifying the epoch number and epoch size in seconds
