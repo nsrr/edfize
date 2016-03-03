@@ -15,6 +15,9 @@
   - Updated to colorize 0.7.7
   - Updated simplecov to 0.11.2
 
+### Bug Fix
+- Fixed an issue where EDFs using `.EDF` instead of `.edf` weren't being tested by `edfize t`
+
 ## 0.2.0 (March 12, 2015)
 
 ### Enhancements

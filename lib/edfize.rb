@@ -71,6 +71,6 @@ EOT
   end
 
   def self.edfs_in_current_directory_and_subdirectories
-    Dir.glob('**/*.edf')
+    Dir.glob('**/*.edf', File::FNM_CASEFOLD)
   end
 end
