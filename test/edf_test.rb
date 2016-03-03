@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class EdfTest < Minitest::Test
-
   def setup
     @valid_edf_no_data_records = Edfize::Edf.new('test/support/zero-data-records.edf')
     @valid_edf_with_three_signals = Edfize::Edf.new('test/support/simulated-01.edf')
+    @edf_invalid_date = Edfize::Edf.new('test/support/invalid-date.edf')
   end
 
   def test_edf_version
@@ -24,7 +26,12 @@ class EdfTest < Minitest::Test
 
   def test_edf_start_date_of_recording
     assert_equal 168, @valid_edf_no_data_records.send('compute_offset', :start_date_of_recording)
-    assert_equal '00.00.00', @valid_edf_no_data_records.start_date_of_recording
+    assert_equal '31.01.85', @valid_edf_no_data_records.start_date_of_recording
+  end
+
+  def test_edf_start_date
+    assert_equal Date.parse('1985-01-31'), @valid_edf_no_data_records.start_date
+    assert_nil @edf_invalid_date.start_date
   end
 
   def test_edf_start_time_of_recording
@@ -150,5 +157,4 @@ class EdfTest < Minitest::Test
     assert_equal [12,13,14,15,16,17], @signal_three.digital_values
     assert_equal [12.25490196078431, 13.235294117647072, 14.215686274509807, 15.196078431372541, 16.176470588235304, 17.15686274509804], @signal_three.physical_values
   end
-
 end

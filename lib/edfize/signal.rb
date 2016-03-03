@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Edfize
   class Signal
     attr_accessor :label, :transducer_type, :physical_dimension,
@@ -26,7 +28,7 @@ module Edfize
     end
 
     def self.create(&block)
-      signal = self.new
+      signal = new
       yield signal if block_given?
       signal
     end
@@ -45,6 +47,5 @@ module Edfize
     def samples
       @physical_values
     end
-
   end
 end

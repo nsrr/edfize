@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require 'edfize/signal'
 
 module Edfize
+  # Class used to load and manipulate EDFs
   class Edf
     # EDF File Path
     attr_reader   :filename
@@ -40,7 +43,7 @@ module Edfize
     RESERVED_SIZE = HEADER_CONFIG[:reserved][:size]
 
     def self.create(filename, &block)
-      edf = self.new(filename)
+      edf = new(filename)
       yield edf if block_given?
       edf
     end
@@ -66,7 +69,7 @@ module Edfize
     end
 
     def size_of_header
-      HEADER_OFFSET + ns * Signal::SIGNAL_CONFIG.collect{|k,h| h[:size]}.inject(:+)
+      HEADER_OFFSET + ns * Signal::SIGNAL_CONFIG.collect { |_k, h| h[:size] }.inject(:+)
     end
 
     def expected_size_of_header
@@ -88,27 +91,25 @@ module Edfize
     end
 
     def section_value_to_string(section)
-      self.instance_variable_get("@#{section}").to_s
+      instance_variable_get("@#{section}").to_s
     end
 
     def section_units(section)
       units = HEADER_CONFIG[section][:units].to_s
-      result = if units == ''
+      if units == ''
         ''
       else
-        " #{units}" + (self.instance_variable_get("@#{section}") == 1 ? '' : 's')
+        " #{units}" + (instance_variable_get("@#{section}") == 1 ? '' : 's')
       end
-      result
     end
 
     def section_description(section)
       description = HEADER_CONFIG[section][:description].to_s
-      result = if description == ''
+      if description == ''
         ''
       else
         " #{description}"
       end
-      result
     end
 
     def print_header
@@ -131,6 +132,27 @@ module Edfize
       puts "Expected Size of Header (bytes): #{expected_size_of_header}"
       puts "Expected Size of Data   (bytes): #{expected_data_size}"
       puts "Expected Total Size     (bytes): #{expected_edf_size}"
+    end
+
+    def start_date
+      (dd, mm, yy) = start_date_of_recording.split('.')
+      dd = parse_integer(dd)
+      mm = parse_integer(mm)
+      yy = parse_integer(yy)
+      yyyy = if yy && yy >= 85
+               yy + 1900
+             else
+               yy + 2000
+             end
+      Date.strptime("#{mm}/#{dd}/#{yyyy}", '%m/%d/%Y')
+    rescue
+      nil
+    end
+
+    def parse_integer(string)
+      Integer(format('%g', string))
+    rescue
+      nil
     end
 
     protected

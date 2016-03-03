@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'fileutils'
 
 class EdfizeTest < Minitest::Test
-
   def setup
     FileUtils.cd('test/support')
     @original_stdout = $stdout
@@ -36,7 +37,6 @@ class EdfizeTest < Minitest::Test
   end
 
   def test_run_command
-    assert_equal ['simulated-01.edf', 'zero-data-records.edf'], Edfize.launch(['r']).sort
+    assert_equal %w(invalid-date.edf simulated-01.edf zero-data-records.edf), Edfize.launch(['r']).sort
   end
-
 end

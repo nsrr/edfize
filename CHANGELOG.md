@@ -1,6 +1,15 @@
 ## 0.3.0
 
 ### Enhancements
+- **Test Changes**
+  - Added a test to make sure date in EDF and EDF+ formats are valid
+    - The EDF header date is checked in the following manner: (a) Is the EDF+
+      header (29-FEB-2100) a valid date, if (yes) check that the EDF header date
+      (29.02.00) matches the EDF+ date, if (no) check that the EDF header date
+      (29.02.00) is a valid date. The EDF+ header date is checked first since
+      (29-FEB-2100) is NOT a valid date as leap years only occur in a century
+      years divisible by 400, while the truncated EDF date would be (02.29.00)
+      which would be incorrectly seen as valid since 2000 is a leap year.
 - **Gem Changes**
   - Updated to Ruby 2.3.0
   - Updated to colorize 0.7.7

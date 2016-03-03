@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Edfize
   module Tests
     class Result

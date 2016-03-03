@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 module Edfize
   module Tests
+    # Runs a series of tests on an EDF
     class Runner
       attr_reader :tests_run, :tests_failed, :edf, :verbose, :show_passing
 
-      TESTS = %w( expected_length reserved_area_blank reserved_signal_areas_blank )
+      TESTS = %w(expected_length reserved_area_blank reserved_signal_areas_blank valid_date)
 
       def initialize(edf, argv)
         @tests_run = 0
@@ -23,16 +26,16 @@ module Edfize
           results << result
         end
 
-        puts "\n#{@edf.filename}" if results.reject{|r| r.passes}.count > 0 or @show_passing
+        puts "\n#{@edf.filename}" if results.reject(&:passes).count > 0 || @show_passing
         results.each do |result|
           print_result(result)
         end
       end
 
       def print_result(result)
-        if self.show_passing or !result.passes
+        if show_passing || !result.passes
           puts result.pass_fail
-          unless result.passes or not self.verbose
+          unless result.passes || !verbose
             puts result.expected
             puts result.actual
           end
