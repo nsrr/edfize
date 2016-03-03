@@ -8,7 +8,7 @@ module Edfize
         result = Result.new
         result.passes = !runner.edf.start_date.nil?
         result.pass_fail = pass_fail(result.passes, 'Valid Date')
-        result.expected  = '    Expected : Valid Date'
+        result.expected  = '    Expected : dd.mm.yy'
         result.actual    = "    Actual   : #{runner.edf.start_date_of_recording}"
         result
       end
