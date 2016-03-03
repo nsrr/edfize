@@ -43,6 +43,6 @@ exclude_paths:
 - "CHANGELOG.md"
 - "edfize.gemspec"
 - Gemfile
-- "LICENSE.txt"
+- LICENSE
 - Rakefile
 - "README.md"
