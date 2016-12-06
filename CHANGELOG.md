@@ -15,6 +15,7 @@
   - Updated to colorize 0.7.7
   - Updated simplecov to 0.11.2
   - Removed minitest-reporters
+  - Updated to simplecov 0.12.0
 
 ### Bug Fix
 - Fixed an issue where EDFs using `.EDF` instead of `.edf` weren't being tested by `edfize t`
