@@ -29,6 +29,6 @@ Run `edfize` on command line to view full list of options.'
   spec.require_paths = ['lib']
 
   spec.add_dependency 'bundler', '~> 1.13'
-  spec.add_dependency 'colorize', '~> 0.7.7'
+  spec.add_dependency 'colorize', '~> 0.8.1'
   spec.add_dependency 'rake'
 end

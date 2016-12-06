@@ -12,7 +12,7 @@
       which would be incorrectly seen as valid since 2000 is a leap year.
 - **Gem Changes**
   - Updated to Ruby 2.3.3
-  - Updated to colorize 0.7.7
+  - Updated to colorize 0.8.1
   - Updated simplecov to 0.11.2
   - Removed minitest-reporters
   - Updated to simplecov 0.12.0
