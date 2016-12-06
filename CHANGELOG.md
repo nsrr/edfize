@@ -11,7 +11,7 @@
       years divisible by 400, while the truncated EDF date would be (02.29.00)
       which would be incorrectly seen as valid since 2000 is a leap year.
 - **Gem Changes**
-  - Updated to Ruby 2.3.0
+  - Updated to Ruby 2.3.3
   - Updated to colorize 0.7.7
   - Updated simplecov to 0.11.2
 
