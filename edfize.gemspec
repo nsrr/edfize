@@ -1,9 +1,8 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 # Compiling the Gem
 # gem build edfize.gemspec
-# gem install ./edfize-x.x.x.gem --no-ri --no-rdoc --local
+# gem install ./edfize-x.x.x.gem --no-document --local
 #
 # gem push edfize-x.x.x.gem
 # gem list -r edfize
@@ -29,8 +28,7 @@ Run `edfize` on command line to view full list of options.'
   spec.test_files    = spec.files.grep(%r{^(test)/})
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'bundler', '~> 1.13'
   spec.add_dependency 'colorize', '~> 0.7.7'
-
-  spec.add_development_dependency 'bundler', '~> 1.8'
-  spec.add_development_dependency 'rake'
+  spec.add_dependency 'rake'
 end
