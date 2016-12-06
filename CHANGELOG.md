@@ -14,6 +14,7 @@
   - Updated to Ruby 2.3.3
   - Updated to colorize 0.7.7
   - Updated simplecov to 0.11.2
+  - Removed minitest-reporters
 
 ### Bug Fix
 - Fixed an issue where EDFs using `.EDF` instead of `.edf` weren't being tested by `edfize t`
