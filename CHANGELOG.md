@@ -19,7 +19,8 @@
   - Updated to bundler 1.13
 
 ### Bug Fix
-- Fixed an issue where EDFs using `.EDF` instead of `.edf` weren't being tested by `edfize t`
+- Fixed an issue where EDFs using `.EDF` instead of `.edf` weren't being tested
+  by `edfize t`
 
 ## 0.2.0 (March 12, 2015)
 
