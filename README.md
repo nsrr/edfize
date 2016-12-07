@@ -50,6 +50,26 @@ Use `edfize version` to check the version of Edfize.
 
     edfize version
 
+### Example of how to rewrite the start date of recording for a folder of EDFs
+
+This will update all EDFs in the current directory and subdirectories with a
+start date of 1 Jan 1985.
+
+`rewrite_signal_date.rb`
+```ruby
+# gem install edfize --no-document
+# ruby rewrite_signal_date.rb
+
+require 'rubygems'
+require 'edfize'
+
+CLIPPING_DATE = '01.01.85'.freeze
+
+Edfize.edfs do |edf|
+  edf.update(start_date_of_recording: CLIPPING_DATE)
+end
+```
+
 ### Example of how to Load and Analyze EDFs in a Ruby Script
 
 The following Ruby file demonstrates how to make use of the Edfize gem to load EDF signals into arrays for analysis.
@@ -58,7 +78,7 @@ The following Ruby file demonstrates how to make use of the Edfize gem to load E
 ```ruby
 # Tutorial 01 - Load EDF and Signals
 #
-#   gem install edfize
+#   gem install edfize --no-document
 #
 #   ruby tutorial_01_load_edf_and_signals.rb
 #

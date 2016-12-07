@@ -10,6 +10,11 @@
     - Note that while `edf_paths` is a direct replacement for
       `edfs_in_current_directory_and_subdirectories`, it is recommended to use
       the new `edfs` enumerator instead
+  - Added `Edf::update` method that allows portions of the header to be updated
+    - Change an EDF's start_date_of_recording to the clipping date, 1 Jan 1985
+    - `edf.update(start_date_of_recording: '01.01.85')`
+    - Change an EDF's start_time_of_recording to midnight
+    - `edf.update(start_time_of_recording: '00.00.00')`
 
 ## 0.3.0 (December 7, 2016)
 

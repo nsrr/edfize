@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'tempfile'
 
 class EdfTest < Minitest::Test
   def setup
@@ -156,5 +157,31 @@ class EdfTest < Minitest::Test
     assert_equal [125.02479591058213, 125.02861066605631, 125.03242542153048], @signal_two.physical_values
     assert_equal [12,13,14,15,16,17], @signal_three.digital_values
     assert_equal [12.25490196078431, 13.235294117647072, 14.215686274509807, 15.196078431372541, 16.176470588235304, 17.15686274509804], @signal_three.physical_values
+  end
+
+  def test_should_rewrite_start_date_of_recording
+    file = Tempfile.new('invalid-date-copy.edf')
+    FileUtils.cp('test/support/invalid-date.edf', file.path)
+    edf = Edfize::Edf.new(file.path)
+    assert_equal '00.00.00', edf.start_date_of_recording
+    edf.update(start_date_of_recording: '01.01.85')
+    edf_new = Edfize::Edf.new(file.path) # Load new EDF to check that change is written to disk.
+    assert_equal '01.01.85', edf_new.start_date_of_recording
+  ensure
+    file.close
+    file.unlink # Deletes temporary file.
+  end
+
+  def test_should_rewrite_start_time_of_recording
+    file = Tempfile.new('invalid-date-copy.edf')
+    FileUtils.cp('test/support/invalid-date.edf', file.path)
+    edf = Edfize::Edf.new(file.path)
+    assert_equal '20.14.57', edf.start_time_of_recording
+    edf.update(start_time_of_recording: '12.34.56')
+    edf_new = Edfize::Edf.new(file.path) # Load new EDF to check that change is written to disk.
+    assert_equal '12.34.56', edf_new.start_time_of_recording
+  ensure
+    file.close
+    file.unlink # Deletes temporary file.
   end
 end

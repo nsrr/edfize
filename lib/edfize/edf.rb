@@ -156,6 +156,21 @@ module Edfize
       nil
     end
 
+    def update(hash)
+      hash.each do |section, value|
+        update_header_section(section, value)
+      end
+    end
+
+    def update_header_section(section, value)
+      return false unless HEADER_CONFIG.keys.include?(section)
+      send "#{section}=", value
+      size = HEADER_CONFIG[section][:size]
+      string = format("%-#{size}.#{size}s", send(section).to_s)
+      IO.binwrite(filename, string, send(:compute_offset, section))
+      true
+    end
+
     protected
 
     def read_header
