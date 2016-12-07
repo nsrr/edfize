@@ -63,7 +63,7 @@ start date of 1 Jan 1985.
 require 'rubygems'
 require 'edfize'
 
-CLIPPING_DATE = '01.01.85'.freeze
+CLIPPING_DATE = '01.01.85'
 
 Edfize.edfs do |edf|
   edf.update(start_date_of_recording: CLIPPING_DATE)
