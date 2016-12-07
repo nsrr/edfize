@@ -1,5 +1,16 @@
 ## 0.4.0
 
+### Enhancements
+- **Scripting Changes**
+  - Edfize now provides an enumerator to iterate through a folder of EDFs:
+    - `Edfize.edfs` # Current directory and subdirectories
+    - `Edfize.edfs(recursive: false)` # Only current directory
+  - Deprecated `edfs_in_current_directory_and_subdirectories` in favor of
+    `edf_paths`
+    - Note that while `edf_paths` is a direct replacement for
+      `edfs_in_current_directory_and_subdirectories`, it is recommended to use
+      the new `edfs` enumerator instead
+
 ## 0.3.0 (December 7, 2016)
 
 ### Enhancements
