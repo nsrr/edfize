@@ -3,6 +3,7 @@
 require 'test_helper'
 require 'fileutils'
 
+# Tests to assure that the gem commands run correctly.
 class EdfizeTest < Minitest::Test
   def setup
     FileUtils.cd('test/support')
