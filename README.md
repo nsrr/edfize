@@ -53,7 +53,7 @@ Use `edfize version` to check the version of Edfize.
 ### Example of how to rewrite the start date of recording for a folder of EDFs
 
 This will update all EDFs in the current directory and subdirectories with a
-start date of 1 Jan 1985.
+start date of 1st Jan 1985.
 
 `rewrite_signal_date.rb`
 ```ruby
