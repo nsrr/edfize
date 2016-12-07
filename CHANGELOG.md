@@ -1,4 +1,4 @@
-## 0.3.0
+## 0.3.0 (December 7, 2016)
 
 ### Enhancements
 - **Test Changes**
