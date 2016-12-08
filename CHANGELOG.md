@@ -15,6 +15,9 @@
     - `edf.update(start_date_of_recording: '01.01.85')`
     - Change an EDF's start_time_of_recording to midnight
     - `edf.update(start_time_of_recording: '00.00.00')`
+- **Test Changes**
+  - Removed `reserved_signal_areas_blank` check as it was flagging too many
+    false positives
 
 ## 0.3.0 (December 7, 2016)
 

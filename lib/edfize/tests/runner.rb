@@ -6,7 +6,7 @@ module Edfize
     class Runner
       attr_reader :tests_run, :tests_failed, :edf, :verbose, :show_passing
 
-      TESTS = %w(expected_length reserved_area_blank reserved_signal_areas_blank valid_date)
+      TESTS = %w(expected_length reserved_area_blank valid_date) # reserved_signal_areas_blank
 
       def initialize(edf, argv)
         @tests_run = 0
