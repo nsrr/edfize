@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'Load, validate, and parse European Data Format files. Used for batch testing EDFs for errors. \
 Run `edfize` on command line to view full list of options.'
   spec.homepage      = 'https://github.com/sleepepi/edfize'
-  spec.license       = 'CC BY-NC-SA 3.0'
+  spec.license       = 'MIT'
 
   spec.files         = Dir['{bin,lib}/**/*'] + %w(CHANGELOG.md LICENSE Rakefile README.md edfize.gemspec)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
