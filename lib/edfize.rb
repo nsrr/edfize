@@ -69,12 +69,6 @@ EOT
     puts help_message
   end
 
-  # TODO: Remove in 0.5.0
-  def self.edfs_in_current_directory_and_subdirectories
-    warn "[DEPRECATION] `edfs_in_current_directory_and_subdirectories` is deprecated.  Please use `edf_paths` instead."
-    edf_paths(recursive: true)
-  end
-
   # Returns an enumerator of EDFs.
   def self.edfs(recursive: true)
     return enum_for(:edfs, recursive: recursive) unless block_given?
