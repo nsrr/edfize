@@ -4,6 +4,8 @@
 - **Scripting Changes**
   - Removed `edfs_in_current_directory_and_subdirectories` in favor of
     `edf_paths`
+- **Test Changes**
+  - Running `edfize test --failing` now displays progress, by @kitlawes
 - **Gem Changes**
   - Updated to Ruby 2.4.1
   - Updated to simplecov 0.14.1
