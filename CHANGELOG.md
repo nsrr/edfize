@@ -1,4 +1,4 @@
-## 0.5.0
+## 0.5.0 (April 21, 2017)
 
 ### Enhancements
 - **Scripting Changes**
