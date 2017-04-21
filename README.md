@@ -4,7 +4,8 @@
 [![Dependency Status](https://gemnasium.com/sleepepi/edfize.svg)](https://gemnasium.com/sleepepi/edfize)
 [![Code Climate](https://codeclimate.com/github/sleepepi/edfize/badges/gpa.svg)](https://codeclimate.com/github/sleepepi/edfize)
 
-Ruby gem used to load, validate, and parse European Data Format files. Used for batch testing EDFs for errors. Ruby 2.2+ compatible.
+Ruby gem used to load, validate, and parse European Data Format files. Used for
+batch testing EDFs for errors. Ruby 2.2+ compatible.
 
 ## Installation
 
@@ -16,24 +17,32 @@ Use `gem install edfize --pre` to update Edfize to the latest prerelease
 
 ### Validate EDFs
 
-Use `edfize test` to test that EDFs stored in the current directory have a valid format.
+Use `edfize test` to test that EDFs stored in the current directory have a valid
+format.
 
     cd <edf-directory>
     edfize test
 
 A list of validations performed is:
 
-- **Expected Length Check**: Compares the calculated size of the file based on signal sizes defined in the header with the actual file size. A failure may indicate corruption in the header (if the expected is less than the actual file size), or a partial/truncated file (if the expected is more than the actual file size).
-- **Reserved Area Checks**: Check that reserved areas are blank. Non-blank reserved areas can indicate a sign of header or EDF file corruption.
+- **Expected Length Check**: Compares the calculated size of the file based on
+  signal sizes defined in the header with the actual file size. A failure may
+  indicate corruption in the header (if the expected is less than the actual
+  file size), or a partial/truncated file (if the expected is more than the
+  actual file size).
+- **Reserved Area Checks**: Check that reserved areas are blank. Non-blank
+  reserved areas can indicate a sign of header or EDF file corruption.
 
 Flags that can be added to the `test` command include:
 
 - `--failing`: Only display EDFs with failing tests
-- `--quiet`: Suppress detailed failure descriptions that show the expected versus the actual result of the test
+- `--quiet`: Suppress detailed failure descriptions that show the expected
+  versus the actual result of the test
 
 ### Print Signal Header information
 
-Use `edfize run` to print out signal header information for each EDF in the current directory.
+Use `edfize run` to print out signal header information for each EDF in the
+current directory.
 
     cd <edf-directory>
     edfize run
@@ -72,7 +81,8 @@ end
 
 ### Example of how to Load and Analyze EDFs in a Ruby Script
 
-The following Ruby file demonstrates how to make use of the Edfize gem to load EDF signals into arrays for analysis.
+The following Ruby file demonstrates how to make use of the Edfize gem to load
+EDF signals into arrays for analysis.
 
 `tutorial_01_load_edf_and_signals.rb`
 ```ruby
