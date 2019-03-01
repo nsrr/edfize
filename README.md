@@ -68,10 +68,10 @@ start date of 1st Jan 1985.
 # gem install edfize --no-document
 # ruby rewrite_signal_date.rb
 
-require 'rubygems'
-require 'edfize'
+require "rubygems"
+require "edfize"
 
-CLIPPING_DATE = '01.01.85'
+CLIPPING_DATE = "01.01.85"
 
 Edfize.edfs do |edf|
   edf.update(start_date_of_recording: CLIPPING_DATE)
@@ -96,23 +96,23 @@ EDF signals into arrays for analysis.
 #    https://sleepdata.org/datasets/shhs/files/edfs/shhs1?f=shhs1-200001.edf
 #
 
-require 'rubygems'
-require 'edfize'
+require "rubygems"
+require "edfize"
 
 # Loads the file and reads the EDF Header
-edf = Edfize::Edf.new('shhs1-200001.edf')
+edf = Edfize::Edf.new("shhs1-200001.edf")
 
 # Loads the data section of the EDF into Signal objects
 edf.load_signals
 
 # Print out information on the signals
-puts "EDF #{edf.filename} contains the following #{edf.signals.count} signal#{'s' unless edf.signals.count == 1}:\n\n"
+puts "EDF #{edf.filename} contains the following #{edf.signals.count} signal#{"s" unless edf.signals.count == 1}:\n\n"
 
 edf.signals.each do |signal|
   puts "Signal"
   puts "  Label                    : #{signal.label}"
   puts "  Samples Per Data Record  : #{signal.samples_per_data_record}"
-  puts "  First 10 Physical Values : #{(signal.physical_values[0..10] + ['...']).inspect}\n\n"
+  puts "  First 10 Physical Values : #{(signal.physical_values[0..10] + ["..."]).inspect}\n\n"
 end
 ```
 
