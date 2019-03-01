@@ -8,9 +8,9 @@ module Edfize
         reserved_areas = runner.edf.signals.collect(&:reserved_area)
 
         result = Result.new
-        result.passes = (reserved_areas.reject{|r| r.to_s.strip == ''}.count == 0)
-        result.pass_fail = "  #{result.passes ? 'PASS' : 'FAIL'}".colorize(result.passes ? :green : :red) + ' Signal Reserved Area Blank'
-        result.expected  = "    Expected : #{[''] * runner.edf.signals.count}"
+        result.passes = (reserved_areas.reject{|r| r.to_s.strip == ""}.count == 0)
+        result.pass_fail = "  #{result.passes ? "PASS" : "FAIL"}".send(result.passes ? :green : :red) + " Signal Reserved Area Blank"
+        result.expected  = "    Expected : #{[""] * runner.edf.signals.count}"
         result.actual    = "    Actual   : #{reserved_areas}"
         result
       end

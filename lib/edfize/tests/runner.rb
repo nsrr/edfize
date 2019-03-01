@@ -12,8 +12,8 @@ module Edfize
         @tests_run = 0
         @tests_failed = 0
         @edf = edf
-        @verbose = argv.include?('--quiet') ? false : true
-        @show_passing = argv.include?('--failing') ? false : true
+        @verbose = argv.include?("--quiet") ? false : true
+        @show_passing = argv.include?("--failing") ? false : true
       end
 
       def run_tests

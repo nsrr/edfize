@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'edfize/signal'
-require 'date'
+require "edfize/signal"
+require "date"
 
 module Edfize
   # Class used to load and manipulate EDFs
@@ -24,16 +24,16 @@ module Edfize
     attr_accessor :signals
 
     HEADER_CONFIG = {
-      version:                        { size:  8, after_read: :to_i,  name: 'Version' },
-      local_patient_identification:   { size: 80, after_read: :strip, name: 'Local Patient Identification' },
-      local_recording_identification: { size: 80, after_read: :strip, name: 'Local Recording Identification' },
-      start_date_of_recording:        { size:  8,                     name: 'Start Date of Recording', description: '(dd.mm.yy)' },
-      start_time_of_recording:        { size:  8,                     name: 'Start Time of Recording', description: '(hh.mm.ss)'},
-      number_of_bytes_in_header:      { size:  8, after_read: :to_i,  name: 'Number of Bytes in Header' },
-      reserved:                       { size: 44,                     name: 'Reserved' },
-      number_of_data_records:         { size:  8, after_read: :to_i,  name: 'Number of Data Records' },
-      duration_of_a_data_record:      { size:  8, after_read: :to_i,  name: 'Duration of a Data Record', units: 'second' },
-      number_of_signals:              { size:  4, after_read: :to_i,  name: 'Number of Signals' }
+      version:                        { size:  8, after_read: :to_i,  name: "Version" },
+      local_patient_identification:   { size: 80, after_read: :strip, name: "Local Patient Identification" },
+      local_recording_identification: { size: 80, after_read: :strip, name: "Local Recording Identification" },
+      start_date_of_recording:        { size:  8,                     name: "Start Date of Recording", description: "(dd.mm.yy)" },
+      start_time_of_recording:        { size:  8,                     name: "Start Time of Recording", description: "(hh.mm.ss)"},
+      number_of_bytes_in_header:      { size:  8, after_read: :to_i,  name: "Number of Bytes in Header" },
+      reserved:                       { size: 44,                     name: "Reserved" },
+      number_of_data_records:         { size:  8, after_read: :to_i,  name: "Number of Data Records" },
+      duration_of_a_data_record:      { size:  8, after_read: :to_i,  name: "Duration of a Data Record", units: "second" },
+      number_of_signals:              { size:  4, after_read: :to_i,  name: "Number of Signals" }
     }
 
     HEADER_OFFSET = HEADER_CONFIG.collect{|k,h| h[:size]}.inject(:+)
@@ -97,17 +97,17 @@ module Edfize
 
     def section_units(section)
       units = HEADER_CONFIG[section][:units].to_s
-      if units == ''
-        ''
+      if units == ""
+        ""
       else
-        " #{units}" + (instance_variable_get("@#{section}") == 1 ? '' : 's')
+        " #{units}" + (instance_variable_get("@#{section}") == 1 ? "" : "s")
       end
     end
 
     def section_description(section)
       description = HEADER_CONFIG[section][:description].to_s
-      if description == ''
-        ''
+      if description == ""
+        ""
       else
         " #{description}"
       end
@@ -118,7 +118,7 @@ module Edfize
       puts "Total File Size                : #{edf_size} bytes"
       puts "\nHeader Information"
       HEADER_CONFIG.each do |section, hash|
-        puts "#{hash[:name]}#{' '*(31 - hash[:name].size)}: " + section_value_to_string(section) + section_units(section) + section_description(section)
+        puts "#{hash[:name]}#{" "*(31 - hash[:name].size)}: " + section_value_to_string(section) + section_units(section) + section_description(section)
       end
       puts "\nSignal Information"
       signals.each_with_index do |signal, index|
@@ -136,7 +136,7 @@ module Edfize
     end
 
     def start_date
-      (dd, mm, yy) = start_date_of_recording.split('.')
+      (dd, mm, yy) = start_date_of_recording.split(".")
       dd = parse_integer(dd)
       mm = parse_integer(mm)
       yy = parse_integer(yy)
@@ -145,13 +145,13 @@ module Edfize
              else
                yy + 2000
              end
-      Date.strptime("#{mm}/#{dd}/#{yyyy}", '%m/%d/%Y')
+      Date.strptime("#{mm}/#{dd}/#{yyyy}", "%m/%d/%Y")
     rescue
       nil
     end
 
     def parse_integer(string)
-      Integer(format('%g', string))
+      Integer(format("%g", string))
     rescue
       nil
     end
@@ -181,7 +181,7 @@ module Edfize
 
     def read_header_section(section)
       result = IO.binread(@filename, HEADER_CONFIG[section][:size], compute_offset(section) )
-      result = result.to_s.send(HEADER_CONFIG[section][:after_read]) unless HEADER_CONFIG[section][:after_read].to_s == ''
+      result = result.to_s.send(HEADER_CONFIG[section][:after_read]) unless HEADER_CONFIG[section][:after_read].to_s == ""
       self.instance_variable_set("@#{section}", result)
     end
 
@@ -230,7 +230,7 @@ module Edfize
       (0..ns-1).to_a.each do |signal_number|
         section_size = Signal::SIGNAL_CONFIG[section][:size]
         result = IO.binread(@filename, section_size, offset+(signal_number*section_size))
-        result = result.to_s.send(Signal::SIGNAL_CONFIG[section][:after_read]) unless Signal::SIGNAL_CONFIG[section][:after_read].to_s == ''
+        result = result.to_s.send(Signal::SIGNAL_CONFIG[section][:after_read]) unless Signal::SIGNAL_CONFIG[section][:after_read].to_s == ""
         @signals[signal_number].send("#{section}=", result)
       end
     end
@@ -246,7 +246,7 @@ module Edfize
       length_of_bytes_to_read = (data_records_to_retrieve+1) * size_of_data_record_in_bytes
       epoch_offset_size = epoch_number * epoch_size * size_of_data_record_in_bytes # TODO: The size in bytes of an epoch
 
-      all_signal_data = (IO.binread(@filename, length_of_bytes_to_read, size_of_header + epoch_offset_size).unpack('s<*') rescue [])
+      all_signal_data = (IO.binread(@filename, length_of_bytes_to_read, size_of_header + epoch_offset_size).unpack("s<*") rescue [])
       load_signal_data(all_signal_data, data_records_to_retrieve+1)
     end
 
@@ -254,7 +254,7 @@ module Edfize
     # 16-bit signed integer in "Little Endian" format (least significant byte first)
     # unpack:  s<         16-bit signed, (little-endian) byte order
     def load_digital_signals
-      all_signal_data = IO.binread(@filename, nil, size_of_header).unpack('s<*')
+      all_signal_data = IO.binread(@filename, nil, size_of_header).unpack("s<*")
       load_signal_data(all_signal_data, @number_of_data_records)
     end
 

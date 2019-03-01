@@ -1,5 +1,11 @@
 ## 0.6.0
 
+### Enhancements
+- **Gem Changes**
+  - Update to ruby 2.6.1
+  - Update to simplecov 0.16.1
+  - Remove colorize
+
 ## 0.5.0 (April 21, 2017)
 
 ### Enhancements

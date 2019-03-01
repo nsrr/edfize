@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'test_helper'
-require 'fileutils'
+require "test_helper"
+require "fileutils"
 
 # Tests to assure that the gem commands run correctly.
 class EdfizeTest < Minitest::Test
   def setup
-    FileUtils.cd('test/support')
+    FileUtils.cd("test/support")
     @original_stdout = $stdout
     $stdout = StringIO.new
   end
@@ -14,7 +14,7 @@ class EdfizeTest < Minitest::Test
   def teardown
     $stdout = @original_stdout
     @original_stdout = nil
-    FileUtils.cd('../..')
+    FileUtils.cd("../..")
   end
 
   def test_edfize_application
@@ -26,18 +26,18 @@ class EdfizeTest < Minitest::Test
   end
 
   def test_version_command
-    assert_nil Edfize.launch(['v'])
+    assert_nil Edfize.launch(["v"])
   end
 
   def test_help_command
-    assert_nil Edfize.launch(['h'])
+    assert_nil Edfize.launch(["h"])
   end
 
   def test_test_command
-    assert_nil Edfize.launch(['t'])
+    assert_nil Edfize.launch(["t"])
   end
 
   def test_run_command
-    assert_equal %w(invalid-date.edf simulated-01.edf zero-data-records.edf), Edfize.launch(['r']).sort
+    assert_equal %w(invalid-date.edf simulated-01.edf zero-data-records.edf), Edfize.launch(["r"]).sort
   end
 end

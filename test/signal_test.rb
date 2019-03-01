@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 # Tests to assure signals are loaded correctly.
 class SignalTest < Minitest::Test
   def setup
-    @valid_edf_with_three_signals = Edfize::Edf.new('test/support/simulated-01.edf')
+    @valid_edf_with_three_signals = Edfize::Edf.new("test/support/simulated-01.edf")
     @valid_edf_with_three_signals.load_signals
     @signal_one   = @valid_edf_with_three_signals.signals[0]
     @signal_two   = @valid_edf_with_three_signals.signals[1]
@@ -17,42 +17,42 @@ class SignalTest < Minitest::Test
   end
 
   def test_signal_one_header
-    assert_equal 'SaO2', @signal_one.label
-    assert_equal '', @signal_one.transducer_type
-    assert_equal '', @signal_one.physical_dimension
+    assert_equal "SaO2", @signal_one.label
+    assert_equal "", @signal_one.transducer_type
+    assert_equal "", @signal_one.physical_dimension
     assert_equal 0.0, @signal_one.physical_minimum
     assert_equal 100.0, @signal_one.physical_maximum
     assert_equal(-32_768, @signal_one.digital_minimum)
     assert_equal 32_767, @signal_one.digital_maximum
-    assert_equal '', @signal_one.prefiltering
+    assert_equal "", @signal_one.prefiltering
     assert_equal 1, @signal_one.samples_per_data_record
-    assert_equal ' ' * 32, @signal_one.reserved_area
+    assert_equal " " * 32, @signal_one.reserved_area
   end
 
   def test_signal_two_header
-    assert_equal 'H.R.', @signal_two.label
-    assert_equal '', @signal_two.transducer_type
-    assert_equal '', @signal_two.physical_dimension
+    assert_equal "H.R.", @signal_two.label
+    assert_equal "", @signal_two.transducer_type
+    assert_equal "", @signal_two.physical_dimension
     assert_equal 0.0, @signal_two.physical_minimum
     assert_equal 250.0, @signal_two.physical_maximum
     assert_equal(-32_768, @signal_two.digital_minimum)
     assert_equal 32_767, @signal_two.digital_maximum
-    assert_equal '', @signal_two.prefiltering
+    assert_equal "", @signal_two.prefiltering
     assert_equal 1, @signal_two.samples_per_data_record
-    assert_equal ' ' * 32, @signal_two.reserved_area
+    assert_equal " " * 32, @signal_two.reserved_area
   end
 
   def test_signal_three_header
-    assert_equal 'EEG(sec)', @signal_three.label
-    assert_equal '', @signal_three.transducer_type
-    assert_equal 'uV', @signal_three.physical_dimension
+    assert_equal "EEG(sec)", @signal_three.label
+    assert_equal "", @signal_three.transducer_type
+    assert_equal "uV", @signal_three.physical_dimension
     assert_equal(-125.0, @signal_three.physical_minimum)
     assert_equal 125.0, @signal_three.physical_maximum
     assert_equal(-128, @signal_three.digital_minimum)
     assert_equal 127, @signal_three.digital_maximum
-    assert_equal '', @signal_three.prefiltering
+    assert_equal "", @signal_three.prefiltering
     assert_equal 2, @signal_three.samples_per_data_record
-    assert_equal ' ' * 32, @signal_three.reserved_area
+    assert_equal " " * 32, @signal_three.reserved_area
   end
 
   def test_signal_one_digital_values

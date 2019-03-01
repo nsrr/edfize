@@ -1,6 +1,8 @@
-sudo: false
 language: ruby
 rvm:
-  - 2.2.7
-  - 2.3.3
-  - 2.4.1
+- 2.6.1
+- ruby-head
+gemfile: "gems.rb"
+matrix:
+  allow_failures:
+  - rvm: ruby-head

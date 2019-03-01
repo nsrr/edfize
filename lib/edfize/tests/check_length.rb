@@ -8,7 +8,7 @@ module Edfize
       def test_expected_length(runner)
         result = Result.new
         result.passes = (runner.edf.expected_edf_size == runner.edf.edf_size)
-        result.pass_fail = "  #{result.passes ? 'PASS' : 'FAIL'}".colorize(result.passes ? :green : :red) + ' Expected File Size'
+        result.pass_fail = "  #{result.passes ? "PASS" : "FAIL"}".send(result.passes ? :green : :red) + " Expected File Size"
         result.expected  = "    Expected : #{runner.edf.expected_edf_size} bytes"
         result.actual    = "    Actual   : #{runner.edf.edf_size} bytes"
         result
