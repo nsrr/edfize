@@ -1,4 +1,4 @@
-## 0.6.0
+## 0.6.0 (March 1, 2019)
 
 ### Enhancements
 - **Gem Changes**

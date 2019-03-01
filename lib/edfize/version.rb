@@ -5,7 +5,7 @@ module Edfize
     MAJOR = 0
     MINOR = 6
     TINY = 0
-    BUILD = "pre"
+    BUILD = nil
 
     STRING = [MAJOR, MINOR, TINY, BUILD].compact.join(".")
   end
