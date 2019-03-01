@@ -1,7 +1,6 @@
 # Edfize
 
 [![Build Status](https://travis-ci.org/sleepepi/edfize.svg?branch=master)](https://travis-ci.org/sleepepi/edfize)
-[![Dependency Status](https://gemnasium.com/sleepepi/edfize.svg)](https://gemnasium.com/sleepepi/edfize)
 [![Code Climate](https://codeclimate.com/github/sleepepi/edfize/badges/gpa.svg)](https://codeclimate.com/github/sleepepi/edfize)
 
 Ruby gem used to load, validate, and parse European Data Format files. Used for
