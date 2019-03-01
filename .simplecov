@@ -1,5 +1,5 @@
 SimpleCov.start do
-  add_group 'Libraries', '/lib/'
+  add_group "Libraries", "/lib/"
 
-  add_filter '/test/'
+  add_filter "/test/"
 end
