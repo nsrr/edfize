@@ -7,6 +7,6 @@ module Edfize
     TINY = 0
     BUILD = "pre"
 
-    STRING = [MAJOR, MINOR, TINY, BUILD].compact.join('.')
+    STRING = [MAJOR, MINOR, TINY, BUILD].compact.join(".")
   end
 end
